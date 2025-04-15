@@ -65,19 +65,19 @@ function getGitHubUserProfile(username) {
 function printGithubUserProfile(username) {
     return axios.get(`https://api.github.com/users/${username}`)
     .then(response => {
-        const img = response.data.avatar_url; //obtenemos la imagen del usuario
-        const name = response.data.name; //obtenemos el nombre del usuario
-        const userContainer = document.createElement('div'); //creamos un contenedor para el usuario
-        const profileImg = document.createElement('img'); //creamos un elemento img para la imagen del usuario
-        const profileName = document.createElement('h1'); //creamos un elemento h1 para el nombre del usuario
-        profileImg.src = img; //asignamos la imagen al elemento img
-        profileName.innerText = name; //asignamos el nombre al elemento h1
-        userContainer.appendChild(profileImg); //añadimos la imagen al contenedor
-        userContainer.appendChild(profileName); //añadimos el nombre al contenedor
-        document.body.appendChild(userContainer); //añadimos el contenedor al body del documento
-        return {img, name}; //devolvemos un objeto con la imagen y el nombre del usuario
+        const img = response.data.avatar_url; 
+        const name = response.data.name; 
+        const userContainer = document.createElement('div');
+        const profileImg = document.createElement('img'); 
+        const profileName = document.createElement('h1'); 
+        profileImg.src = img; 
+        profileName.innerText = name; 
+        userContainer.appendChild(profileImg); 
+        userContainer.appendChild(profileName); 
+        document.body.appendChild(userContainer);
+        return {img, name}; 
     })
-    .catch(error => console.error('Error:', error)); //si algo falla lanzamos un error
+    .catch(error => console.error('Error:', error)); 
 }
 
 // //  7. Crea una función getAndPrintGitHubUserProfile(username) que contenga una petición a la API para obtener

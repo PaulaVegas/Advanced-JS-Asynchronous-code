@@ -89,12 +89,51 @@ function printGithubUserProfile(username) {
 // //     <h1>Nombre de usuario</h1>
 // //     <p>Public repos: (número de repos)</p>
 // // </section>
+const getAndPrintGitHubUserProfile = (username) => {
+    return axios.get(`https:/api.github.com/users/${username}`)
+    .then((user) => {
+        const { name, avatar_url: img, public_repos: publicRepos } = user.data; 
 
+        const htmlCard = `  
+                        <section>
+                            <img src="${img}" alt="${name}">
+                            <h1>${name}</h1>
+                            <p>Public repos: ${publicRepos}</p>
+                        </section>
+                        `;
+
+        return htmlCard;
+
+    })
+    .catch((err) => console.log(err))
+}
 
 // //  8.- Manipulación del DOM: Crea un input de tipo texto, y un botón buscar.
 // //  El usuario escribirá en el input el nombre de usuario de GitHub que quiera buscar.
 // //  Después llamaremos a la función getAndPrintGitHubUserProfile(username) que se ejecute cuando se pulse el botón buscar.
 // // (Esto no se testea).
+const body = document.body;
+
+const inputText = document.createElement('input');
+inputText.setAttribute('type', 'text');
+inputText.setAttribute('placeholder', 'Find user...');
+
+const btnSearch = document.createElement('button');
+btnSearch.setAttribute('id', 'searchBtn');
+btnSearch.textContent = 'Search'
+
+body.appendChild(inputText);
+body.appendChild(btnSearch);
+
+btnSearch.addEventListener('click', () => {
+    const inputTextValue = inputText.value
+    console.log(inputTextValue)
+    
+    getAndPrintGitHubUserProfile(inputTextValue)
+        .then((html) => {
+            body.innerHTML += html;
+        })
+})
 
 // // GitHub API (II)- Promesas, promesas y más promesas
 
@@ -111,3 +150,20 @@ function printGithubUserProfile(username) {
 // // Con Promise.all() harás que se tenga que resolver todo el proceso de peticiones a GitHub a la vez.
 // // Cuando Promise.all() haya terminado: Consigue que se imprima por consola la url del repositorio de cada usuario.
 // //  Consigue que se imprima por consola el nombre de cada usuario.
+const fetchGithubUsers = (userNames) => {
+    return Promise.all(userNames.map(username => {
+        return axios.get(`https://api.github.com/users/${username}`)
+            .then(user => user.data); 
+        }))
+        .then(users => {
+            // Map-eamos cada usuario con el formato indicado
+            return users.map(user => ({
+                name: user.name,
+                html_url: user.html_url
+            }));
+        })
+        .catch(err => {
+            console.error("Error fetching users with Axios:", err);
+            throw err;
+        });
+};

@@ -156,7 +156,12 @@ const fetchGithubUsers = (userNames) => {
             .then(user => user.data); 
         }))
         .then(users => {
-            // Map-eamos cada usuario con el formato indicado
+            // imprimimos los resultados por consola
+            users.forEach((user) => {
+                console.log(user.name);
+                console.log(user.html_url)
+            })
+            // Map-eamos y retornamos cada usuario con el formato indicado
             return users.map(user => ({
                 name: user.name,
                 html_url: user.html_url
